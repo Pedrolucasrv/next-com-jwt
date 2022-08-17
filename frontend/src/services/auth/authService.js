@@ -1,6 +1,8 @@
+import { HttpClient } from "../../infra/HttpClient/HttpClient";
+
 export const authService = {
     async login({username, password}){
-        return fetch('http://localhost:4000/api/login',{
+        return HttpClient(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -10,8 +12,10 @@ export const authService = {
                 password
             })
         })
-        .then((res)=> {
-            console.log(res)
+        .then(async (res)=> {
+            if( !res.ok ) throw new Error('usuario ou senha invalidos')
+            const body = await res.body
+            console.log(body)
         })
     }
 };
